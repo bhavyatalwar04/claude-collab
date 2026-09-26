@@ -23,7 +23,15 @@ function redisKV(url: string, token: string): KV {
     incr: (k) => r.incr(k),
     hset: async (k, f, v) => void (await r.hset(k, { [f]: v })),
     hget: (k, f) => r.hget<string>(k, f),
-    hgetall: async (k) => ((await r.hgetall(k)) as Record<string, string> | null) ?? {},
+    hgetall: async (k) => {
+      // Without automatic deserialization Upstash returns HGETALL as a flat [field, value, ...] array.
+      const raw = (await r.hgetall(k)) as unknown as string[] | Record<string, string> | null;
+      if (!raw) return {};
+      if (!Array.isArray(raw)) return raw;
+      const out: Record<string, string> = {};
+      for (let i = 0; i + 1 < raw.length; i += 2) out[raw[i]] = raw[i + 1];
+      return out;
+    },
     hdel: async (k, f) => void (await r.hdel(k, f)),
     zadd: async (k, score, member) => void (await r.zadd(k, { score, member })),
     zrangeAfter: (k, after) => r.zrange<string[]>(k, `(${after}`, "+inf", { byScore: true }),
