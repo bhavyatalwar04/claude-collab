@@ -1,0 +1,168 @@
+:root {
+  --bg: #f6f5f1;
+  --panel: #ffffff;
+  --border: #e3e0d8;
+  --text: #1f1e1b;
+  --muted: #6f6b62;
+  --accent: #c2410c;
+  --accent-text: #ffffff;
+  --code-bg: #f1efe9;
+  --online: #16a34a;
+  --offline: #a8a29e;
+  --human-bg: #fff4ec;
+  --radius: 10px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161513;
+    --panel: #1f1e1b;
+    --border: #34322d;
+    --text: #ece9e2;
+    --muted: #a19c91;
+    --accent: #f97316;
+    --accent-text: #1a1a1a;
+    --code-bg: #2a2824;
+    --online: #22c55e;
+    --offline: #6b6860;
+    --human-bg: #2e241c;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+input, select, textarea {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+textarea { resize: vertical; }
+
+button {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+button:disabled { opacity: 0.5; cursor: default; }
+
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; }
+
+pre.cmd {
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.error { color: #dc2626; }
+
+/* Start screen */
+.start {
+  max-width: 460px;
+  margin: 12vh auto 0;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.start h1 { margin: 0; font-size: 28px; }
+.row { display: flex; gap: 8px; }
+
+/* Room */
+.room { display: flex; flex-direction: column; height: 100vh; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.topbar h1 { font-size: 16px; margin: 0; }
+.topbar .spacer { flex: 1; }
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 340px;
+  gap: 12px;
+  padding: 12px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.panel > h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: 0;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.panel .body { padding: 12px; overflow: auto; flex: 1; min-height: 0; }
+
+.side { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.side .panel:first-child { flex: 0 0 auto; }
+.side .panel:last-child { flex: 1; }
+
+.agent { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--offline); flex: none; }
+.dot.on { background: var(--online); }
+
+.messages { display: flex; flex-direction: column; gap: 10px; }
+.msg { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+.msg.human { background: var(--human-bg); }
+.msg .meta { display: flex; gap: 8px; align-items: baseline; font-size: 12px; margin-bottom: 2px; }
+.msg .from { font-weight: 600; }
+.msg .text { white-space: pre-wrap; word-break: break-word; }
+
+.composer { border-top: 1px solid var(--border); padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.composer .row select { width: 160px; flex: none; }
+
+.ctx { border-bottom: 1px solid var(--border); padding: 8px 0; }
+.ctx:last-child { border-bottom: none; }
+.ctx summary { cursor: pointer; font-weight: 600; }
+.ctx .text { white-space: pre-wrap; word-break: break-word; margin-top: 6px; }
+
+.connect label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 2px; }
+.connect label:first-child { margin-top: 0; }
+
+@media (max-width: 1000px) {
+  .room { height: auto; min-height: 100vh; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .panel.chat { height: 70vh; }
+}
